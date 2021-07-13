@@ -4,6 +4,7 @@ import 'package:flutter_todo_app/todo.dart';
 
 class MainModel extends ChangeNotifier {
   List<Todo> todoList = [];
+  String newtodoText = '';
 
   Future getTodoList() async {
     final snapshot =
@@ -23,6 +24,14 @@ class MainModel extends ChangeNotifier {
       todoList.sort((a, b) => b.createdAt.compareTo(a.createdAt));
       this.todoList = todoList;
       notifyListeners();
+    });
+  }
+
+  Future add() async {
+    final collection = FirebaseFirestore.instance.collection('todoList');
+    await collection.add({
+      'title': newtodoText,
+      'createdAt': Timestamp.now(),
     });
   }
 }
